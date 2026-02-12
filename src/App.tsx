@@ -10,7 +10,7 @@ import MovieDetails from "./pages/MovieDetails";
 import SeriesDetails from "./pages/SeriesDetails";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
-// 👇 الصفحات الجديدة للوحة التحكم
+// 👇 1. استيراد الصفحات الجديدة (مهم جداً)
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -22,9 +22,6 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        {/* ملاحظة: وضعنا Navbar هنا ليظهر في كل الصفحات. 
-           لو عايز تخفيه في صفحة الأدمن، ممكن نعمل شرط بسيط لاحقاً.
-        */}
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
@@ -32,7 +29,7 @@ const App = () => (
           <Route path="/series/:id" element={<SeriesDetails />} />
           <Route path="/search" element={<Search />} />
           
-          {/* 👇 مسارات لوحة التحكم الجديدة */}
+          {/* 👇 2. إضافة مسارات اللوحة هنا */}
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />} />
 
