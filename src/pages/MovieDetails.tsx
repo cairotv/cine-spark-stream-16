@@ -41,20 +41,20 @@ const MovieDetails = () => {
     switch (color) {
       case 'red':
         return {
-          text: 'للكبار',
+          text: 'دراما للناضجين (قصصي)',
           style: 'bg-red-500/10 text-red-400 border-red-500/20',
           dot: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.6)]'
         };
       case 'yellow':
         return {
-          text: 'شبابي',
+          text: 'ينصح بإشراف عائلي',
           style: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
           dot: 'bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.6)]'
         };
       case 'green':
       default:
         return {
-          text: 'عائلي',
+          text: 'مشاهدة عائلية وآمنة',
           style: 'bg-green-500/10 text-green-400 border-green-500/20',
           dot: 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.6)]'
         };
