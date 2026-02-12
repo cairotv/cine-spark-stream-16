@@ -71,6 +71,5 @@ def fetch_and_store_pro(media_type, total_items=50): # اجعل الرقم 10000
             print(f"خطأ: {e}")
 
 if __name__ == "__main__":
-    # تشغيل السحب (يمكنك زيادة الرقم هنا)
-    fetch_and_store_pro('movie', total_items=50)
-    fetch_and_store_pro('tv', total_items=50)
+    fetch_and_organize('movie', pages_to_fetch=100) # 50 صفحة × 20 فيلم = 1000 فيلم
+    fetch_and_organize('tv', pages_to_fetch=100)    # 1000 مسلسل
