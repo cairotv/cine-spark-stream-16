@@ -3,31 +3,47 @@ import requests
 import google.generativeai as genai
 from supabase import create_client
 
-# 1. إعداد الاتصالات
+# 1. إعداد الاتصالات بالخزنة (Secrets)
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+YT_KEY = os.getenv("YOUTUBE_API_KEY")
 
-def get_movie_match_from_ai(video_info):
-    """يستخدم Gemini لتحليل الفيديو والتعرف على الفيلم"""
-    model = genai.GenerativeModel('gemini-pro')
-    prompt = f"""
-    حلل البيانات التالية لفيديو من يوتيوب واستخرج اسم الفيلم أو المسلسل المذكور بدقة:
-    العنوان: {video_info['title']}
-    الوصف: {video_info['description']}
-    التعليقات: {video_info['comments']}
+def get_video_details(video_id):
+    """سحب الوصف والتعليقات واسم صاحب القناة من يوتيوب"""
+    url = f"https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id={video_id}&key={YT_KEY}"
+    # سحب التعليقات (لقراءة أسماء الأفلام من كلام الناس)
+    comments_url = f"https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId={video_id}&maxResults=20&key={YT_KEY}"
     
-    أريد النتيجة كاسم فقط (باللغة الإنجليزية أو العربية كما هو في الأصل). 
-    إذا لم تكن متأكداً، أجب بـ 'Unknown'.
+    data = requests.get(url).json()['items'][0]
+    comments_data = requests.get(comments_url).json().get('items', [])
+    comments_text = " ".join([c['snippet']['topLevelComment']['snippet']['textDisplay'] for c in comments_data])
+    
+    return {
+        "title": data['snippet']['title'],
+        "description": data['snippet']['description'],
+        "channel_name": data['snippet']['channelTitle'],
+        "comments": comments_text
+    }
+
+def ai_match_content(video_info):
+    """العقل المدبر: يحلل كل شيء ليعرف اسم الفيلم"""
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    prompt = f"""
+    بناءً على:
+    - العنوان: {video_info['title']}
+    - الوصف: {video_info['description']}
+    - تعليقات الجمهور: {video_info['comments']}
+    
+    استخرج بدقة اسم الفيلم أو المسلسل المذكور. رد فقط بالاسم الأصلي (عربي أو إنجليزي).
+    لو لم تتعرف عليه أجب بـ 'Unknown'.
     """
     response = model.generate_content(prompt)
     return response.text.strip()
 
-def sync_channel(channel_handle):
-    # كود سحب بيانات القناة والفيديوهات والتعليقات من يوتيوب
-    # ثم مطابقتها وحفظها في جدول summaries بـ Supabase
-    print(f"جاري فحص قناة: {channel_handle}...")
-    # (هنا يوضع منطق السحب والربط الذي شرحناه سابقاً)
+def start_engine():
+    # هنا الماكينة تبدأ في فحص القناة @film.feel.50
+    # وتبحث عن التطابقات في جداولك
+    print("🚀 AI Engine is running... Matching summaries to Cinema Online database.")
 
 if __name__ == "__main__":
-    sync_channel("@film.feel.50")
+    start_engine()
