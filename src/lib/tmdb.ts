@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { ContentItem } from '@/types/content';
 
 // TMDB API Key - Replace with your own from https://www.themoviedb.org/settings/api
-const API_KEY = ''; // Leave empty to use sample data
+const API_KEY = 'afef094e7c0de13c1cac98227a61da4d'; // Leave empty to use sample data
 
 const tmdb = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
