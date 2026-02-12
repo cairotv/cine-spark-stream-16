@@ -1,0 +1,23 @@
+name: AI Movie Matcher
+on:
+  schedule:
+    - cron: '0 */12 * * *' # يعمل كل 12 ساعة
+  workflow_dispatch: # يسمح لك بتشغيله يدوياً بضغطة زر
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: pip install requests google-generativeai supabase
+      - name: Run Matcher
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/matcher.py
