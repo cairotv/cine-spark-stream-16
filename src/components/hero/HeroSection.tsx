@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Plus, Star, Info } from 'lucide-react';
+import { Play, Star, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ContentItem, imgUrl, GENRES } from '@/types/content';
 

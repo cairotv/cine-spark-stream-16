@@ -1,1 +1,1 @@
-export default function Watch({ type }: { type: 'movie' | 'tv' }) { return <div>مشغل الفيديو</div>; }
+export default function Watch({ type: _type }: { type: 'movie' | 'tv' }) { return <div>مشغل الفيديو</div>; }

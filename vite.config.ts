@@ -24,5 +24,6 @@ export default defineConfig({
     }),
     sitemap({ hostname: 'https://cinma.online' })
   ],
-  resolve: { alias: { '@': path.resolve(__dirname, './src') } }
+  resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+  server: { port: 8080 }
 });
