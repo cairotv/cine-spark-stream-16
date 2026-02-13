@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Play, Clock, Film } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { imgUrl, type Season, type Episode } from '@/types/content';
