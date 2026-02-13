@@ -5,7 +5,7 @@ from supabase import create_client
 import json
 
 # ----------------------------------------------------------
-# 🔐 إعدادات الاتصال (استبدل القيم الموجودة بمفاتيحك)
+# 🔐 إعدادات الاتصال (مضمنة - لا تحتاج تعديل)
 # ----------------------------------------------------------
 SUPABASE_URL = "https://lhpuuwpbhpccqkwqugknh.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxocHV3dXBiaHBjcWt3cXVna2hoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MDkyODgsImV4cCI6MjA4NjQ4NTI4OH0.QCYzJaWo0mmFQwZjwaNjIJR1jR4wOb4CbqTKxTAaO2w"
@@ -61,7 +61,6 @@ def fetch_and_organize(media_type, pages_to_fetch=5):
             results = resp.json().get('results', [])
             for item in results:
                 try:
-                    # تجاهل الأفلام للكبار فقط (ممنوع)
                     if item.get('adult') is True:
                         continue
                     
@@ -69,28 +68,26 @@ def fetch_and_organize(media_type, pages_to_fetch=5):
                     rating_code = get_age_rating(item_id, media_type)
                     light_color = determine_traffic_light(rating_code)
                     
-                    # ✅ البيانات المطابقة تماماً لجدول Supabase
                     row = {
                         "id": item_id,
                         "title": item.get('title') if media_type == 'movie' else item.get('name'),
-                        "arabic_title": None,  # سنملأه لاحقاً يدوياً
+                        "arabic_title": None,
                         "overview": item.get('overview'),
-                        "ai_summary": None,    # هيتملأ من Gemini بعدين
+                        "ai_summary": None,
                         "rating_color": light_color,
-                        "genres": json.dumps(item.get('genre_ids', [])),  # تخزين كـ JSON
+                        "genres": json.dumps(item.get('genre_ids', [])),
                         "release_date": item.get('release_date') if media_type == 'movie' else item.get('first_air_date'),
                         "poster_path": item.get('poster_path'),
                         "backdrop_path": item.get('backdrop_path'),
                         "custom_embed_url": None
                     }
                     
-                    # إدراج أو تحديث
                     supabase.table(table_name).upsert(row).execute()
                     print(f"✅ {row['title']} - {light_color}")
                 except Exception as e:
                     print(f"⚠️ خطأ في item {item.get('id')}: {e}")
                     continue
-            time.sleep(0.5)  # احترام حدود API
+            time.sleep(0.5)
         except Exception as e:
             print(f"⚠️ خطأ في الصفحة {page}: {e}")
             continue
